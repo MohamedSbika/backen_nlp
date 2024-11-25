@@ -2,10 +2,11 @@ from flask import Flask, request, jsonify
 from transformers import pipeline
 from flask_cors import CORS
 import pdfplumber
-import os
 
 app = Flask(__name__)
-CORS(app)  
+
+# Enable CORS for the frontend URL
+CORS(app, origins=["https://front-nlp-6yo1.vercel.app"])
 
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 translator_en_to_fr = pipeline("translation_en_to_fr")
@@ -14,7 +15,6 @@ translator_ar_to_en = pipeline("translation_ar_to_en", model="Helsinki-NLP/opus-
 translator_en_to_ar = pipeline("translation_en_to_ar", model="Helsinki-NLP/opus-mt-en-ar")
 translator_ar_to_fr = pipeline("translation_ar_to_fr", model="Helsinki-NLP/opus-mt-ar-fr")
 translator_fr_to_ar = pipeline("translation_fr_to_ar", model="Helsinki-NLP/opus-mt-fr-ar")
-
 
 @app.route('/summarize_pdf', methods=['POST'])
 def summarize_pdf():
@@ -102,8 +102,6 @@ def translate_fr_to_ar():
 
     translation = translator_fr_to_ar(text)
     return jsonify({"translated_text": translation[0]['translation_text']})
-
-
 
 # Run the Flask server
 if __name__ == '__main__':
