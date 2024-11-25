@@ -5,8 +5,8 @@ import pdfplumber
 
 app = Flask(__name__)
 
-# Enable CORS for the frontend URL
-CORS(app, origins=["https://front-nlp-6yo1.vercel.app"])
+# Setup CORS to allow requests from the specific frontend URL
+CORS(app, resources={r"/*": {"origins": "https://front-nlp-6yo1.vercel.app"}})
 
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 translator_en_to_fr = pipeline("translation_en_to_fr")
